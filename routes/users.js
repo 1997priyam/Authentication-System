@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
 
-router.post('/', function(req, res) {
+router.post('/', async function(req, res) {
   try{
     let { name, email, password } = req.body;
     let role = 'user', createdUser;
@@ -19,13 +19,15 @@ router.post('/', function(req, res) {
     if(user) return res.status(403).json({error: 'User with this email already exists!'});
     bcrypt.genSalt(10, (err, salt) => {
       if (err) throw err;
-      bcrypt.hash(password, salt, (err, hash) => {
+      bcrypt.hash(password, salt, async (err, hash) => {
         if (err) throw err;
         createdUser = await userModel.create({email, name, password: hash, role});
+        res.status(200).json(createdUser);
       });
     });
-    return res.status(200).json(createdUser);
+    return;
   } catch(e) {
+    console.log(e);
     return res.status(500).json({error: 'Server error !'})
   } 
 });
