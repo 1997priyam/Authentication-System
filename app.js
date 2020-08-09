@@ -3,9 +3,17 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var bodyParser = require("body-parser");
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://orbital:orbital123@ds047040.mlab.com:47040/auth-system', { useNewUrlParser: true, useUnifiedTopology: true })
+const db = mongoose.connection
+db.on('error', (error) => console.error(error))
+db.once('open', () => console.log('connected to database'))
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var loginRouter = require('./routes/login');
 
 var app = express();
 
@@ -21,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
