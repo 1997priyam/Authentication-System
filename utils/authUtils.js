@@ -22,5 +22,20 @@ module.exports = {
     shouldBeAdmin: (req, res, next) => {
         if(req.user.role == 'admin') next();
         else return res.status(403).json({error: 'You are not authorized to access this API.'});
-     }
+     },
+     
+    isLoggedIn: (req, res, next) => {
+      const authHeader = req.headers['authorization'];
+      const token = authHeader && authHeader.split(' ')[1];
+      if (token == null) req.isLoggedIn = false;
+    
+      jwt.verify(token, TOKEN_SECRET, (err, user) => {
+        if (err) req.isLoggedIn = false;
+        else {
+          req.user = user;
+          req.isLoggedIn = true;
+        }
+        next();
+      })
+    }
 }

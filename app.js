@@ -6,7 +6,11 @@ var logger = require('morgan');
 var bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://orbital:orbital123@ds047040.mlab.com:47040/auth-system', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://orbital:orbital123@ds047040.mlab.com:47040/auth-system', { useNewUrlParser: true, 
+  useUnifiedTopology: true, 
+  useCreateIndex: true,
+  autoIndex: true
+  })
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database'))
@@ -15,7 +19,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var topicRouter = require('./routes/topic');
-const topic = require('./models/topic');
+var articleRouter = require('./routes/article');
 
 var app = express();
 
@@ -33,6 +37,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/topic', topicRouter);
+app.use('/article', articleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
