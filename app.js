@@ -6,11 +6,12 @@ var logger = require('morgan');
 var bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://orbital:orbital123@ds047040.mlab.com:47040/auth-system', { useNewUrlParser: true, 
+mongoose.connect('mongodb://url', { useNewUrlParser: true, 
   useUnifiedTopology: true, 
   useCreateIndex: true,
   autoIndex: true
   })
+
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database'))
